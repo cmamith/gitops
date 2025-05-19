@@ -3,7 +3,8 @@ kind: Ingress
 metadata:
   name: app-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /  # Optional for path rewriting
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
@@ -30,8 +31,8 @@ spec:
                 name: prometheus-svc
                 port:
                   number: 80
-          - path: /grafana
-            pathType: Prefix
+          - path: /grafana(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: grafana-svc
